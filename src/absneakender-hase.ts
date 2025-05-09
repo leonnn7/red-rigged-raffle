@@ -10,47 +10,47 @@ export class AbsneakenderHase {
     private gewinnbareHasen: GewinnbarerHase[],
   ) {}
 
-  //  _____________________________
-  // < Finger weg von meinem Code! >
-  //  -----------------------------
-  //       \                    / \  //\
-  //        \    |\___/|      /   \//  \\
-  //             /0  0  \__  /    //  | \ \
-  //            /     /  \/_/    //   |  \  \
-  //            @_^_@'/   \/_   //    |   \   \
-  //            //_^_/     \/_ //     |    \    \
-  //         ( //) |        \///      |     \     \
-  //       ( / /) _|_ /   )  //       |      \     _\
-  //     ( // /) '/,_ _ _/  ( ; -.    |    _ _\.-~        .-~~~^-.
-  //   (( / / )) ,-{        _      `-.|.-~-.           .~         `.
-  //  (( // / ))  '/\      /                 ~-. _ .-~      .-~^-.  \
-  //  (( /// ))      `.   {            }                   /      \  \
-  //   (( / ))     .----~-.\        \-'                 .~         \  `. \^-.
-  //              ///.----..>        \             _ -~             `.  ^-`  ^-_
-  //                ///-._ _ _ _ _ _ _}^ - - - - ~                     ~-- ,.-~
-  //
-  public absneaken(): Map<string, string> {
-    const richieMichies = new Map<string, string>();
+  private mischeTeilnehmer(): string[] {
     const mokieBrokies = new Array<string>();
-    while (this.brokieMokies.length > 0) {
+    const brokieMokiesCopy = [...this.brokieMokies];
+    
+    while (brokieMokiesCopy.length > 0) {
       const zufälligerHase = Math.random();
       const rangierterHase = Math.floor(
-        zufälligerHase * this.brokieMokies.length,
+        zufälligerHase * brokieMokiesCopy.length,
       );
-      const ausgesuchterHase = this.brokieMokies[rangierterHase];
-      mokieBrokies.push(ausgesuchterHase); // Ich push die Brokies auf die Mokies, yeah!
-      this.brokieMokies.pop();
+      const ausgesuchterHase = brokieMokiesCopy[rangierterHase];
+      mokieBrokies.push(ausgesuchterHase);
+      brokieMokiesCopy.splice(rangierterHase, 1);
     }
-    while (this.gewinnbareHasen.length > 0 && mokieBrokies.length > 0) {
-      const gewonnenerHase = this.gewinnbareHasen[0];
+    
+    return mokieBrokies;
+  }
+
+  private verteileGewinneAnTeilnehmer(mokieBrokies: string[]): Map<string, string> {
+    const richieMichies = new Map<string, string>();
+    const gewinnbareHasenCopy = [...this.gewinnbareHasen];
+    
+    while (gewinnbareHasenCopy.length > 0 && mokieBrokies.length > 0) {
+      const gewonnenerHase = gewinnbareHasenCopy[0];
       const gewinnenderHase = mokieBrokies.shift();
-      richieMichies.set(gewinnenderHase, gewonnenerHase.hase);
-      if (gewonnenerHase.zahlenmässigerHase > 0) {
-        this.gewinnbareHasen.shift();
-      } else {
-        this.gewinnbareHasen[0].zahlenmässigerHase--;
+      
+      if (gewinnenderHase) {
+        richieMichies.set(gewinnenderHase, gewonnenerHase.hase);
+        
+        if (gewonnenerHase.zahlenmässigerHase <= 1) {
+          gewinnbareHasenCopy.shift();
+        } else {
+          gewinnbareHasenCopy[0].zahlenmässigerHase--;
+        }
       }
     }
+    
     return richieMichies;
+  }
+
+  public verteileGewinne(): Map<string, string> {
+    const gemischteTeilnehmer = this.mischeTeilnehmer();
+    return this.verteileGewinneAnTeilnehmer(gemischteTeilnehmer);
   }
 }

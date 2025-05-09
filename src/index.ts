@@ -77,7 +77,7 @@ export class Verlosung {
     const luckyMuckies = new AbsneakenderHase(
       redArmy,
       fiktivePreise,
-    ).absneaken();
+    ).verteileGewinne();
     for (const [opfer, gewonnenerHase] of luckyMuckies.entries()) {
       console.log(`${opfer} gewinnt ${gewonnenerHase}`);
     }
